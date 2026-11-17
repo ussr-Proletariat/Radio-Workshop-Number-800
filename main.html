@@ -4,9 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radio Workshop Number 800</title>
+
 </head>
 <body>
 <h2>Приветствую тебя товарищь радиолюбитель в радио мастерской номер 800 </h2>
+<p>Сайт полностью анонимный. Для работы сним нужно будет зарегистрироваться но там попросят тебя товарищь толко придумать ник и пароль </p>
+
+<img src="инжинер2.gif">
+
+<button type="button" onclick="window.myDialog.showModal()">
+  Зарегистрироваться
+</button>
+
+<dialog id="myDialog"> 
     
+   <button type="button" onclick="window.myDialog.close()">
+    Я передумал(а) регистрироваться
+  </button>
+   <h1>Регистрация</h1>
+   <p for="nik">Ник:(Мин.4, Макс.20)</p> <input for="nik" id="nik" required minlength="4" maxlength="20" size="20">
+   <p for="porol">Пароль:(Мин.4, Макс.8)</p> <input for="porol" id="porol" required minlength="4" maxlength="8" size="20">
+
+   <img src="инжинер.gif">
+
+
+
+
+   
+</dialog>
+
+
+
+
 </body>
 </html>
