@@ -4,14 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>verstak</title>
+
 </head>
 <body>
     
-    <form>
-  <label for="choose">Would you prefer a banana or cherry? (required)</label>
-  <input id="choose" name="i_like" required />
-  <button>Submit</button>
-</form>
-<button onclick="window.location.href='main.html';">Перейти на сайт</button>
+    <style>
+      .tab > input[type="radio"] {
+        display: none;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      #tab-btn-1:checked~#content-1,
+      #tab-btn-2:checked~#content-2,
+      #tab-btn-3:checked~#content-3 {
+        display: block;
+      }
+
+      .tab > input[type="radio"]:checked + label {
+        color: red;
+      }
+    </style>
+
+
+
+<div class="tab">
+  <input checked id="tab-btn-1" name="tab-btn" type="radio" value="">
+  <label for="tab-btn-1">Сохронить</label>
+  <input id="tab-btn-2" name="tab-btn" type="radio" value="">
+  <label for="tab-btn-2">Печатать</label>
+  <input id="tab-btn-3" name="tab-btn" type="radio" value="">
+  <label for="tab-btn-3">Верстак</label>
+  <div class="tab-content" id="content-1">
+    46367
+  </div>
+  <div class="tab-content" id="content-2">
+    safeeaf
+  </div>
+  <div class="tab-content" id="content-3">
+    
+     <style>
+       body {
+        background-image: url('Сетка.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+       }
+     </style>
+  </div>
+</div>
+
+
 </body>
 </html>
