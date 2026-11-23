@@ -1,15 +1,76 @@
 "use client";
 import { useEffect, useState } from "react";
 
-type Component = { id: number; type: string; x: number; y: number };
+
+
+type Pin = {
+  id: string;
+  offsetX: number;
+  offsetY: number;
+};
+
+type Component = {
+  id: number;
+  type: string;
+  x: number;
+  y: number;
+  pins: Pin[];
+};
+type Wire = { id: number; 
+from: {componentId: number; pinId: string }; 
+to: { componentId: number; pinId: string } };
+
 
 export default function verstak() {
   const [components, setComponents] = useState<Component[]>([]);
   const [dragging, setDragging] = useState<{ id: number; offsetX: number; offsetY: number } | null>(null);
+  const [pendingConnection, setPendingConnection] = useState<{ componentId: number; pinId: string } | null>(null);
+  const [wires, setWires] = useState<Wire[]>([]);
 
+
+function getPins(type: string): Pin[] {
+  if (type === "resistor") return [
+    { id: "1", offsetX: 0, offsetY: 15 }, 
+    { id: "2", offsetX: 60, offsetY: 15 },
+  ];
+  if (type === "tranzistor") return [
+    { id: "base", offsetX: 0, offsetY: 15 },
+    { id: "collector", offsetX: 60, offsetY: 5 },
+    { id: "emitter", offsetX: 60, offsetY: 25 },
+  ];
+
+  if (type === "condensator") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "diod") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "swetodiod") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "voltmetor") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "pereklu") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  return [];
+}
+
+ 
 
   function addComponent(type: string) {
-    setComponents([...components, { id: Date.now(), type, x: 100, y: 100}]);
+    setComponents([...components, { id: Date.now(), type, x: 100, y: 100, pins: getPins(type) }]);
   }
 useEffect(() => {
    if (!dragging) return;
@@ -22,6 +83,7 @@ useEffect(() => {
           : c
       )
     );
+
   }
 
   function handleMouseUp() {
@@ -36,10 +98,9 @@ useEffect(() => {
     window.removeEventListener("mouseup", handleMouseUp);
   };
 
+
 }, [dragging]);
     return (
-
-
 
 <div style={{ backgroundImage: "url('/Сетка.jpg')", backgroundSize: "cover", width: "100%", height: "100vh", position: "relative" }}>
    
@@ -51,7 +112,30 @@ useEffect(() => {
    <button onClick={() => addComponent("swetodiod")}>Светодиод</button><br/>
    <button onClick={() => addComponent("tranzistor")}>Транзистор</button><br/>
    <button onClick={() => addComponent("voltmetor")}>Волтметор</button><br/>
-      <button onClick={() => addComponent("pereklu")}>Переключатель</button><br/>
+   <button onClick={() => addComponent("pereklu")}>Переключатель</button><br/>
+
+<svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
+  {wires.map((w) => {
+    const fromComp = components.find((c) => c.id === w.from.componentId);
+    const toComp = components.find((c) => c.id === w.to.componentId);
+    const fromPin = fromComp?.pins.find((p) => p.id === w.from.pinId);
+    const toPin = toComp?.pins.find((p) => p.id === w.to.pinId);
+
+    if (!fromComp || !toComp || !fromPin || !toPin) return null;
+
+    return (
+      <line
+        key={w.id}
+        x1={fromComp.x + fromPin.offsetX}
+        y1={fromComp.y + fromPin.offsetY}
+        x2={toComp.x + toPin.offsetX}
+        y2={toComp.y + toPin.offsetY}
+        stroke="black"
+        strokeWidth={2}
+      />
+    );
+  })}
+</svg>
 
 {components.map((c) => (
  <div
@@ -70,10 +154,45 @@ useEffect(() => {
    }}
 
 onMouseDown={(e) => {
+
+
    setDragging({ id: c.id, offsetX: e.clientX - c.x, offsetY: e.clientY - c.y,});
-}}
+
+
+  }}
 
 >
+
+{c.pins.map((pin) => (
+  <div
+    key={pin.id}
+    onMouseDown={(e) => {
+    e.stopPropagation();
+      if (!pendingConnection) {
+    setPendingConnection({ componentId: c.id, pinId: pin.id });
+  } else {
+    setWires([...wires, { id: Date.now(), from: pendingConnection, to: { componentId: c.id, pinId: pin.id} }]);
+    setPendingConnection(null);
+  }
+
+
+
+
+    }}
+    style={{
+      position: "absolute",
+      left: pin.offsetX - 4,
+      top: pin.offsetY - 4,
+      width: 8,
+      height: 8,
+      borderRadius: "50%",
+      background: "red",
+      cursor: "crosshair",
+    }}
+  />  
+))}
+
+
    {c.type === "resistor" ? "R" : c.type === "condensator" ? "C" :
     c.type === "diod" ? "D" : c.type === "swetodiod" ? "SD" :
      c.type === "tranzistor" ? "T" : c.type === "voltmetor" ? "V" :
