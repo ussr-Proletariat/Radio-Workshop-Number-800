@@ -64,6 +64,27 @@ function getPins(type: string): Pin[] {
     {id: "2", offsetX: 60, offsetY: 15},
   ];
 
+  if (type === "motorsh") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "katyshka") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "predox") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 15},
+  ];
+
+  if (type === "Poton") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 5},
+    {id: "3", offsetX: 60, offsetY: 25}
+  ];
+
   return [];
 }
 
@@ -113,6 +134,13 @@ useEffect(() => {
    <button onClick={() => addComponent("tranzistor")}>Транзистор</button><br/>
    <button onClick={() => addComponent("voltmetor")}>Волтметор</button><br/>
    <button onClick={() => addComponent("pereklu")}>Переключатель</button><br/>
+   <button onClick={() => addComponent("motorsh")}>Моторчик</button><br/>
+   <button onClick={() => addComponent("katyshka")}>Катушка</button><br/>
+   <button onClick={() => addComponent("predox")}>Предохронитель</button><br/>
+   <button onClick={() => addComponent("Poton")}>Потонцеометор</button><br/>
+   <button onClick={() => addComponent("ne555")}>ne555</button><br/>
+
+
 
 <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
   {wires.map((w) => {
@@ -196,7 +224,9 @@ onMouseDown={(e) => {
    {c.type === "resistor" ? "R" : c.type === "condensator" ? "C" :
     c.type === "diod" ? "D" : c.type === "swetodiod" ? "SD" :
      c.type === "tranzistor" ? "T" : c.type === "voltmetor" ? "V" :
-     c.type === "pereklu" ? "P" : c.type}
+     c.type === "pereklu" ? "P" : c.type === "motorsh" ? "M" :
+      c.type === "katyshka" ? "K" : c.type === "predox" ? "PR" :
+      c.type === "Poton" ? "PO" : c.type}
 
           </div>
         ))}
