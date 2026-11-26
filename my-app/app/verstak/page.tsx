@@ -21,7 +21,7 @@ from: {componentId: number; pinId: string };
 to: { componentId: number; pinId: string } };
 
 
-export default function verstak() {
+export default function Verstak() {
   const [components, setComponents] = useState<Component[]>([]);
   const [dragging, setDragging] = useState<{ id: number; offsetX: number; offsetY: number } | null>(null);
   const [pendingConnection, setPendingConnection] = useState<{ componentId: number; pinId: string } | null>(null);
@@ -150,8 +150,10 @@ useEffect(() => {
     return (
 
 <div style={{ backgroundImage: "url('/Сетка.jpg')", backgroundSize: "cover", width: "100%", height: "100vh", position: "relative" }}>
-   
-   <p>Рабочий стол</p><button onClick={handleSave}>Сахронить</button><button onClick={handleLoad}>Загрузить</button>
+<div className="no-print">
+   <p>Рабочий стол</p><button onClick={handleSave}>Сахронить</button>
+   <button onClick={handleLoad}>Загрузить</button>
+   <button onClick={() => window.print()}>Печать</button><br/>
 
    <button onClick={() => addComponent("resistor")}>Резистор</button><br/>
    <button onClick={() => addComponent("condensator")}>Конденсатор</button><br/>
@@ -166,7 +168,7 @@ useEffect(() => {
    <button onClick={() => addComponent("Poton")}>Потонцеометор</button><br/>
    <button onClick={() => addComponent("ne555")}>ne555</button><br/>
 
-
+</div>
 
 <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
   {wires.map((w) => {
