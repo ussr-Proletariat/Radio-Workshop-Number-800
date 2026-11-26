@@ -1,8 +1,31 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const router = useRouter();
+  const [nick, setNick] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nick, password }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert("Зарегистрирован!");
+      dialogRef.current?.close();
+      router.push("/verstak")
+    } else {
+      alert(data.error);
+    }
+  }
+  
+  
   return (
     <div>
       <main>
@@ -15,33 +38,45 @@ export default function Home() {
       Зарегистрироваться
     </button>
 
+
+
 <dialog ref={dialogRef}>
 
   <button onClick={() => dialogRef.current?.close()}>
     Я передумал(а) регистрироваться</button>
     <h1>Регистрация</h1>
-    <form>
-      <label htmlFor="nik">Ник: (Мин.4, Макс.20)</label>
-      <input id="nik" minLength={4} maxLength={20} size={20} type="text" required /><br />
-    
-      <label htmlFor="porol">Пароль:(Мин.4, Макс.8)</label>
-      <input id="porol" minLength={4} maxLength={8} size={20} type="password" required /><br />
- {/*     <button onClick={() => router.push ("/verstak")}>Зарегистрироваться</button>*/}
-    </form>
-  
+
+  <form onSubmit={handleSubmit}>
+    <label htmlFor="nik">Ник: (Мин.4, Макс.20)</label>
+    <input
+      id="nik"
+      value={nick}
+      onChange={(e) => setNick(e.target.value)}
+      minLength={4}
+      maxLength={20}
+      size={20}
+      type="text"
+      required
+    /><br />
+
+    <label htmlFor="porol">Пароль: (Мин.4, Макс.8)</label>
+    <input
+      id="porol"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      minLength={4}
+      maxLength={8}
+      size={20}
+      type="password"
+      required
+    /><br />
+
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+
+
     <img src="/инжинер.gif" alt="инжинер" /><br />
 </dialog>
-
-
-
-
-
-
-
-  
-
-
-
 
       </main>
     </div>

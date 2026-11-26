@@ -95,6 +95,7 @@ function getPins(type: string): Pin[] {
 }
 
 async function handleSave() {
+  if (components.length === 0 && wires.length === 0) return;
   await fetch("/api/schemes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
