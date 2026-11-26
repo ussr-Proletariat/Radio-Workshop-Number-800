@@ -85,10 +85,35 @@ function getPins(type: string): Pin[] {
     {id: "3", offsetX: 60, offsetY: 25}
   ];
 
+  if (type === "ne555") return [
+    {id: "1", offsetX: 0, offsetY: 15 },
+    {id: "2", offsetX: 60, offsetY: 5},
+    {id: "3", offsetX: 60, offsetY: 25}
+  ];
+
   return [];
 }
 
- 
+async function handleSave() {
+  await fetch("/api/schemes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: "Схема", components, wires}),
+      
+  });
+}
+
+async function handleLoad() {
+  const res = await fetch("/api/schemes");
+  const schmes = await res.json();
+  if (schmes.length === 0) return;
+  const parsed = JSON.parse(schmes[0].data);
+  setComponents(parsed.components);
+  setWires(parsed.wires);
+}
+
+
+
 
   function addComponent(type: string) {
     setComponents([...components, { id: Date.now(), type, x: 100, y: 100, pins: getPins(type) }]);
@@ -125,7 +150,7 @@ useEffect(() => {
 
 <div style={{ backgroundImage: "url('/Сетка.jpg')", backgroundSize: "cover", width: "100%", height: "100vh", position: "relative" }}>
    
-   <h1>Рабочий стол</h1>
+   <p>Рабочий стол</p><button onClick={handleSave}>Сахронить</button><button onClick={handleLoad}>Загрузить</button>
 
    <button onClick={() => addComponent("resistor")}>Резистор</button><br/>
    <button onClick={() => addComponent("condensator")}>Конденсатор</button><br/>
@@ -226,7 +251,7 @@ onMouseDown={(e) => {
      c.type === "tranzistor" ? "T" : c.type === "voltmetor" ? "V" :
      c.type === "pereklu" ? "P" : c.type === "motorsh" ? "M" :
       c.type === "katyshka" ? "K" : c.type === "predox" ? "PR" :
-      c.type === "Poton" ? "PO" : c.type}
+      c.type === "Poton" ? "PO" : c.type === "ne555" ? "555" : c.type}
 
           </div>
         ))}
