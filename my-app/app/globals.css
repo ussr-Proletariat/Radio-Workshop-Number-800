@@ -33,7 +33,7 @@ body {
     background-image: none !important;
     background: wheat !important;
     height: auto !important;
-    mmin-height: 100vh;
+    min-height: 100vh;
   }
   body {
     background: white !important;
